@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="de.golfgl.gdxjamgame.gdxpushmsgs"
+		  xmlns:android="http://schemas.android.com/apk/res/android"
+		  android:versionCode="1"
+		  android:versionName="1.0">
+
+	<application
+		android:allowBackup="true"
+		android:icon="@drawable/ic_launcher"
+		android:label="GdxJam2009"
+		android:theme="@style/GdxTheme">
+
+		<activity
+			android:name="de.golfgl.gdxjamgame.AndroidLauncher"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+			android:label="GdxJam2009"
+			android:launchMode="singleTask"
+			android:screenOrientation="landscape">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+		</activity>
+	</application>
+
+</manifest>
