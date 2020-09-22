@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.IntArray;
 
 public class PlayScreen extends Table {
     private final GdxJamGame game;
@@ -23,6 +24,7 @@ public class PlayScreen extends Table {
     private final Label level;
     private final Label scoreLabel;
     private int score;
+    private final IntArray levelScores = new IntArray();
 
     public PlayScreen(GdxJamGame game) {
         setFillParent(true);
@@ -78,12 +80,20 @@ public class PlayScreen extends Table {
     }
 
     private void prepareNextLevel() {
-        level.setText("Level " + currentLevel);
-        new ActionProducer().addSwingActions(currentLevel, firstRotator, secondRotator);
-        timePassed = 0;
-        inputDone = false;
-        clearActions();
-        addAction(Actions.color(new Color(0, 0, 0, 1f), timeBeforeStart()));
+        boolean nextLevel = new ActionProducer().addSwingActions(currentLevel, firstRotator, secondRotator);
+
+        if (!nextLevel)
+            setGameOver();
+        else {
+
+            level.setText("Level " + currentLevel);
+            timePassed = 0;
+            inputDone = false;
+            clearActions();
+            addAction(Actions.sequence(Actions.color(new Color(0, 0, 0, 1f), timeBeforeStart()),
+                    Actions.delay(getTimeAvail() / 2f),
+                    Actions.color(Color.RED, getTimeAvail() / 2f)));
+        }
     }
 
     private float timeBeforeStart() {
@@ -103,9 +113,21 @@ public class PlayScreen extends Table {
             inputDone = true;
             firstRotator.clearActions();
             secondRotator.clearActions();
+            clearActions();
             updateScoreLabel();
             if (score < getMinScoreNeeded())
                 setGameOver();
+            else {
+                levelScores.add(score);
+                currentLevel++;
+                addAction(Actions.sequence(Actions.color(Color.FOREST, .5f, Interpolation.fade),
+                        Actions.delay(1f), Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                prepareNextLevel();
+                            }
+                        })));
+            }
         }
     }
 
