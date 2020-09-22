@@ -20,6 +20,17 @@ public class MainMenuScreen extends Table {
         setFillParent(true);
         row();
         add("Gdx Jam Game Sept 2020").expand();
+
+        Rotator firstRotator = new Rotator(game);
+        Rotator secondRotator = new Rotator(game);
+
+        row();
+        add(firstRotator).pad(50);
+        row();
+        add(secondRotator).pad(50);
+        row();
+        add().expand();
+
         row();
         final TextButton playButton = new TextButton("Play", game.skin);
         playButton.addListener(new ChangeListener() {
@@ -30,9 +41,9 @@ public class MainMenuScreen extends Table {
 
             }
         });
-        add(playButton);
-        row();
-        add().expand();
+        add(playButton).padBottom(30);
+
+        new ActionProducer().addMainMenuSwingActions(firstRotator, secondRotator);
     }
 
     private void goToNextScreen() {
