@@ -33,4 +33,13 @@ public class ActionProducer {
         setSwingAroundAction(firstRotator, 20, 1f);
         setSwingAroundAction(secondRotator, 20, 1f);
     }
+
+    public String getLevelMotivationText(int currentLevel) {
+        switch (currentLevel) {
+            case 1:
+                return "Too easy?\nLet's see if you can do this, too!";
+            default:
+                return null;
+        }
+    }
 }

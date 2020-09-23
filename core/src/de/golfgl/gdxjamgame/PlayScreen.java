@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.IntArray;
 
 public class PlayScreen extends Table {
@@ -25,8 +26,11 @@ public class PlayScreen extends Table {
     private final Label scoreLabel;
     private int score;
     private final IntArray levelScores = new IntArray();
+    private final ActionProducer actionProducer;
 
     public PlayScreen(GdxJamGame game) {
+        actionProducer = new ActionProducer();
+
         setFillParent(true);
         setBackground(game.white);
 
@@ -59,6 +63,7 @@ public class PlayScreen extends Table {
             public boolean keyDown(InputEvent event, int keycode) {
                 switch (keycode) {
                     case Input.Keys.SPACE:
+                    case Input.Keys.CENTER:
                     case Input.Keys.ENTER:
                         inputDone();
                         return true;
@@ -80,16 +85,36 @@ public class PlayScreen extends Table {
     }
 
     private void prepareNextLevel() {
-        boolean nextLevel = new ActionProducer().addSwingActions(currentLevel, firstRotator, secondRotator);
+
+        boolean nextLevel = actionProducer.addSwingActions(currentLevel, firstRotator, secondRotator);
 
         if (!nextLevel)
             setGameOver();
         else {
 
             level.setText("Level " + currentLevel);
-            timePassed = 0;
             inputDone = false;
             clearActions();
+            String motivationText = actionProducer.getLevelMotivationText(currentLevel);
+
+            if (motivationText != null) {
+                timePassed = -2f;
+                Label motivationLabel = new Label(motivationText, game.skin);
+                motivationLabel.getColor().a = 0;
+                game.stage.addActor(motivationLabel);
+                motivationLabel.pack();
+                motivationLabel.setPosition(game.stage.getWidth() / 2,
+                        game.stage.getHeight() / 2, Align.center);
+                motivationLabel.addAction(Actions.sequence(Actions.fadeIn(.5f, Interpolation.fade),
+                        Actions.delay(1.5f), Actions.fadeOut(.3f, Interpolation.fade),
+                        Actions.removeActor()));
+                firstRotator.addAction(Actions.sequence(Actions.fadeOut(.2f, Interpolation.fade),
+                        Actions.delay(1.8f), Actions.fadeIn(.3f, Interpolation.fade)));
+                secondRotator.addAction(Actions.sequence(Actions.fadeOut(.2f, Interpolation.fade),
+                        Actions.delay(1.8f), Actions.fadeIn(.3f, Interpolation.fade)));            } else {
+                timePassed = 0;
+            }
+
             addAction(Actions.sequence(Actions.color(new Color(0, 0, 0, 1f), timeBeforeStart()),
                     Actions.delay(getTimeAvail() / 2f),
                     Actions.color(Color.RED, getTimeAvail() / 2f)));
