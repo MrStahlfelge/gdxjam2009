@@ -36,6 +36,8 @@ public class ActionProducer {
 
     public String getLevelMotivationText(int currentLevel) {
         switch (currentLevel) {
+            case 0:
+                return "Remember, this is about PARALLEL worlds!\nLet's begin!";
             case 1:
                 return "Too easy?\nLet's see if you can do this, too!";
             default:

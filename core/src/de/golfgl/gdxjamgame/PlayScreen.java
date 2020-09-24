@@ -1,5 +1,6 @@
 package de.golfgl.gdxjamgame;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -19,14 +21,14 @@ public class PlayScreen extends Table {
     private final Rotator firstRotator;
     private final Rotator secondRotator;
     private final ProgressBar progressBar;
+    private final Label level;
+    private final Label scoreLabel;
+    private final IntArray levelScores = new IntArray();
+    private final ActionProducer actionProducer;
     private float timePassed;
     private int currentLevel;
     private boolean inputDone;
-    private final Label level;
-    private final Label scoreLabel;
     private int score;
-    private final IntArray levelScores = new IntArray();
-    private final ActionProducer actionProducer;
 
     public PlayScreen(GdxJamGame game) {
         actionProducer = new ActionProducer();
@@ -99,19 +101,27 @@ public class PlayScreen extends Table {
 
             if (motivationText != null) {
                 timePassed = -2f;
-                Label motivationLabel = new Label(motivationText, game.skin);
+                final Label motivationLabel = new Label(motivationText, game.skin);
                 motivationLabel.getColor().a = 0;
-                game.stage.addActor(motivationLabel);
+                // dirty hack to get this to work on the very first level
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        game.stage.addActor(motivationLabel);
+                    }
+                });
+                motivationLabel.setAlignment(Align.center);
                 motivationLabel.pack();
                 motivationLabel.setPosition(game.stage.getWidth() / 2,
                         game.stage.getHeight() / 2, Align.center);
                 motivationLabel.addAction(Actions.sequence(Actions.fadeIn(.5f, Interpolation.fade),
                         Actions.delay(1.5f), Actions.fadeOut(.3f, Interpolation.fade),
                         Actions.removeActor()));
-                firstRotator.addAction(Actions.sequence(Actions.fadeOut(.2f, Interpolation.fade),
-                        Actions.delay(1.8f), Actions.fadeIn(.3f, Interpolation.fade)));
-                secondRotator.addAction(Actions.sequence(Actions.fadeOut(.2f, Interpolation.fade),
-                        Actions.delay(1.8f), Actions.fadeIn(.3f, Interpolation.fade)));            } else {
+                scoreLabel.addAction(fadeOutAndInAgainAction());
+                level.addAction(fadeOutAndInAgainAction());
+                firstRotator.addAction(fadeOutAndInAgainAction());
+                secondRotator.addAction(fadeOutAndInAgainAction());
+            } else {
                 timePassed = 0;
             }
 
@@ -119,6 +129,11 @@ public class PlayScreen extends Table {
                     Actions.delay(getTimeAvail() / 2f),
                     Actions.color(Color.RED, getTimeAvail() / 2f)));
         }
+    }
+
+    private SequenceAction fadeOutAndInAgainAction() {
+        return Actions.sequence(Actions.fadeOut(.2f, Interpolation.fade),
+                Actions.delay(1.8f), Actions.fadeIn(.3f, Interpolation.fade));
     }
 
     private float timeBeforeStart() {
@@ -192,7 +207,9 @@ public class PlayScreen extends Table {
     private void updateScoreLabel() {
         updateScore();
         scoreLabel.setText(score);
-        scoreLabel.setColor(score < getMinScoreNeeded() ? Color.RED : Color.WHITE);
+        Color color = score < getMinScoreNeeded() ? Color.RED : Color.WHITE;
+        color.a = scoreLabel.getColor().a;
+        scoreLabel.setColor(color);
     }
 
     private void updateScore() {
