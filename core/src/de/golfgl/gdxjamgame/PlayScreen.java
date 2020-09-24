@@ -30,6 +30,7 @@ public class PlayScreen extends Table {
     private int currentLevel;
     private boolean inputDone;
     private int score;
+    boolean isPaused;
 
     public PlayScreen(GdxJamGame game) {
         actionProducer = new ActionProducer();
@@ -180,7 +181,7 @@ public class PlayScreen extends Table {
 
     @Override
     public void act(float delta) {
-        if (!game.isPaused) {
+        if (!isPaused) {
             super.act(delta);
 
             if (!inputDone) {
@@ -194,7 +195,8 @@ public class PlayScreen extends Table {
         }
     }
 
-    private void setGameOver() {
+    public void setGameOver() {
+        clearActions();
         inputDone = true;
         firstRotator.clearActions();
         secondRotator.clearActions();

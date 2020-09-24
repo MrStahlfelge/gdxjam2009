@@ -1,16 +1,16 @@
 package de.golfgl.gdxjamgame;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class MainMenuScreen extends Table {
     private final GdxJamGame game;
+    private final TextButton playButton;
 
     public MainMenuScreen(GdxJamGame game) {
         super(game.skin);
@@ -32,7 +32,7 @@ public class MainMenuScreen extends Table {
         add().expand();
 
         row();
-        final TextButton playButton = new TextButton("Play", game.skin);
+        playButton = new TextButton("Play", game.skin);
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -42,6 +42,7 @@ public class MainMenuScreen extends Table {
             }
         });
         add(playButton).padBottom(30);
+        game.stage.addFocusableActor(playButton);
 
         new ActionProducer().addMainMenuSwingActions(firstRotator, secondRotator);
     }
@@ -51,8 +52,18 @@ public class MainMenuScreen extends Table {
                 Actions.run(new Runnable() {
                     @Override
                     public void run() {
-                        getStage().addActor(new PlayScreen(game));
+                        PlayScreen playScreen = new PlayScreen(game);
+                        game.playScreen = playScreen;
+                        getStage().addActor(playScreen);
                     }
                 }), Actions.removeActor()));
+    }
+
+    @Override
+    protected void setStage(Stage stage) {
+        super.setStage(stage);
+        if (stage != null) {
+            game.stage.setFocusedActor(playButton);
+        }
     }
 }

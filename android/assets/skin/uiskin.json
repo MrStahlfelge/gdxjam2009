@@ -101,7 +101,6 @@ TextTooltipStyle: {
 }
 WindowStyle: {
 	default: {
-		background: black
 		titleFont: carbontype
 		stageBackground: black
 	}
