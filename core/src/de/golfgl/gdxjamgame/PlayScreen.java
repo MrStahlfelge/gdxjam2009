@@ -94,7 +94,7 @@ public class PlayScreen extends Table {
             setGameOver();
         else {
 
-            level.setText("Level " + currentLevel);
+            level.setText("Level " + (1 + currentLevel));
             inputDone = false;
             clearActions();
             String motivationText = actionProducer.getLevelMotivationText(currentLevel);
@@ -120,7 +120,7 @@ public class PlayScreen extends Table {
                 });
                 motivationLabel.setAlignment(Align.center);
                 motivationLabel.setWrap(true);
-                motivationLabel.setWidth(game.stage.getWidth());
+                motivationLabel.setWidth(game.stage.getWidth() - 40);
                 motivationLabel.setHeight(motivationLabel.getPrefHeight());
                 motivationLabel.setPosition(game.stage.getWidth() / 2,
                         game.stage.getHeight() / 2, Align.center);
