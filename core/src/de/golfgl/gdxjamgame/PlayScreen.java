@@ -217,11 +217,16 @@ public class PlayScreen extends Table {
                 Actions.run(new Runnable() {
                     @Override
                     public void run() {
-                        // go to leader board
                         MainMenuScreen mainMenuScreen = new MainMenuScreen(game);
                         mainMenuScreen.getColor().a = 0;
                         mainMenuScreen.addAction(Actions.fadeIn(1f, Interpolation.fade));
                         game.stage.addActor(mainMenuScreen);
+
+                        if (!levelScores.isEmpty()) {
+                            ScoreScreen scoreScreen = new ScoreScreen(game, levelScores);
+                            scoreScreen.show(game.stage);
+                        }
+
                     }
                 }), Actions.removeActor()));
     }

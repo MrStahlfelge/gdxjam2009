@@ -20,6 +20,8 @@ public class MainMenuScreen extends Table {
         setFillParent(true);
         row();
         add("Gdx Jam Game Sept 2020").expand();
+        row();
+        add("PARALLEL WORLDS").expand();
 
         Rotator firstRotator = new Rotator(game);
         Rotator secondRotator = new Rotator(game);

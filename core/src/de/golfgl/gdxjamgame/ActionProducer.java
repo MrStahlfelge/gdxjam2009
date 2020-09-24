@@ -50,21 +50,34 @@ public class ActionProducer {
     }
 
     private void setTurnAroundAction(Rotator actor, float turnAroundTime, float waitTime) {
+        actor.setRotation(normalizeRotation(actor.getRotation()));
         actor.addAction(Actions.sequence(Actions.rotateTo(0, .2f),
                 Actions.forever(Actions.sequence(Actions.delay(waitTime),
                         Actions.rotateBy(-360, turnAroundTime, Interpolation.fade)))));
     }
 
     private void setTurnAroundAction(Rotator actor, float turnAroundTime, boolean clockwise) {
+        actor.setRotation(normalizeRotation(actor.getRotation()));
         actor.addAction(Actions.sequence(Actions.rotateTo(0, .2f),
                 Actions.forever(Actions.rotateBy(clockwise ? -360 : 360, turnAroundTime))));
     }
 
     private void setSwingAroundAction(Image actor, int maxDegrees, float rockAroundTime) {
+        actor.setRotation(normalizeRotation(actor.getRotation()));
         actor.addAction(Actions.sequence(Actions.rotateTo(maxDegrees, .2f),
                 Actions.forever(Actions.sequence(
                         Actions.rotateBy(-2f * maxDegrees, rockAroundTime / 2f, Interpolation.fade),
                         Actions.rotateBy(2 * maxDegrees, rockAroundTime / 2f, Interpolation.fade)))));
+    }
+
+    private float normalizeRotation(float rotation) {
+        while (rotation < -90) {
+            rotation += 180;
+        }
+        while (rotation >= 90) {
+            rotation -= 180;
+        }
+        return rotation;
     }
 
     public void addMainMenuSwingActions(Rotator firstRotator, Rotator secondRotator) {

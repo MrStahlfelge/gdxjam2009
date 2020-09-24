@@ -3,6 +3,9 @@ BitmapFont: {
 	carbontype: {
 		file: carbontype.fnt
 	}
+	carbontype17: {
+		file: carbontype17.fnt
+	}
 }
 Color: {
 	black: {
@@ -63,6 +66,9 @@ LabelStyle: {
 	default: {
 		font: carbontype
 		fontColor: white
+	}
+	small: {
+		font: carbontype17
 	}
 }
 ProgressBarStyle: {

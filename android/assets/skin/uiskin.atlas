@@ -6,7 +6,7 @@ filter: Linear,Linear
 repeat: none
 white10
   rotate: false
-  xy: 1, 376
+  xy: 1, 339
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
@@ -23,5 +23,12 @@ carbontype
   xy: 1, 388
   size: 506, 120
   orig: 506, 120
+  offset: 0, 0
+  index: -1
+carbontype17
+  rotate: false
+  xy: 1, 351
+  size: 506, 35
+  orig: 506, 35
   offset: 0, 0
   index: -1
