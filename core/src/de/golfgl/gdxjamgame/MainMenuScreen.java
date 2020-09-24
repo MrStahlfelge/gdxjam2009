@@ -12,7 +12,7 @@ public class MainMenuScreen extends Table {
     private final GdxJamGame game;
     private final TextButton playButton;
 
-    public MainMenuScreen(GdxJamGame game) {
+    public MainMenuScreen(final GdxJamGame game) {
         super(game.skin);
         this.game = game;
         setBackground(game.white);
@@ -37,6 +37,7 @@ public class MainMenuScreen extends Table {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 playButton.setDisabled(true);
+                game.bell.play();
                 goToNextScreen();
 
             }

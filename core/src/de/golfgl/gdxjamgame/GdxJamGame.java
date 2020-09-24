@@ -2,6 +2,7 @@ package de.golfgl.gdxjamgame;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -22,6 +23,9 @@ public class GdxJamGame extends ApplicationAdapter {
     ControllerMenuStage stage;
     TextureAtlas atlas;
     Drawable white;
+    Sound bell;
+    Sound playSound;
+    Sound lostSound;
 
     @Override
     public void create() {
@@ -29,8 +33,15 @@ public class GdxJamGame extends ApplicationAdapter {
         Gdx.input.setInputProcessor(stage);
 
         prepareSkin();
+        prepareSounds();
 
         prepareUI();
+    }
+
+    private void prepareSounds() {
+        bell = Gdx.audio.newSound(Gdx.files.internal("sound/bell.mp3"));
+        playSound = Gdx.audio.newSound(Gdx.files.internal("sound/playing.mp3"));
+        lostSound = Gdx.audio.newSound(Gdx.files.internal("sound/lost.mp3"));
     }
 
     private void prepareUI() {
@@ -81,8 +92,8 @@ public class GdxJamGame extends ApplicationAdapter {
 
         @Override
         public boolean onControllerDefaultKeyDown() {
-            if (playScreen != null && playScreen.getStage() != null && !playScreen.isPaused) {
-                playScreen.isPaused = true;
+            if (playScreen != null && playScreen.getStage() != null && !playScreen.isPaused()) {
+                playScreen.setPaused(true);
                 new PauseDialog().show(stage);
             }
             return false;
@@ -108,14 +119,14 @@ public class GdxJamGame extends ApplicationAdapter {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     hide();
-                    playScreen.isPaused = false;
+                    playScreen.setPaused(false);
                 }
             });
 
             restart.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    playScreen.isPaused = false;
+                    playScreen.setPaused(false);
                     playScreen.setGameOver();
                     hide();
                 }

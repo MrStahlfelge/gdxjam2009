@@ -30,7 +30,7 @@ public class PlayScreen extends Table {
     private int currentLevel;
     private boolean inputDone;
     private int score;
-    boolean isPaused;
+    private boolean isPaused;
 
     public PlayScreen(GdxJamGame game) {
         actionProducer = new ActionProducer();
@@ -116,6 +116,12 @@ public class PlayScreen extends Table {
                         motivationLabel.setColor(1, 1, 1, 0);
                         motivationLabel.addAction(Actions.sequence(Actions.fadeIn(.5f, Interpolation.fade),
                                 Actions.delay(1.5f), Actions.fadeOut(.3f, Interpolation.fade),
+                                Actions.run(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        game.playSound.play();
+                                    }
+                                }),
                                 Actions.removeActor()));
                     }
                 });
@@ -131,11 +137,13 @@ public class PlayScreen extends Table {
                 secondRotator.addAction(fadeOutAndInAgainAction());
             } else {
                 timePassed = 0;
+                game.playSound.play();
             }
 
             addAction(Actions.sequence(Actions.color(new Color(0, 0, 0, 1f), timeBeforeStart()),
                     Actions.delay(getTimeAvail() / 2f),
                     Actions.color(Color.RED, getTimeAvail() / 2f)));
+
         }
     }
 
@@ -159,13 +167,16 @@ public class PlayScreen extends Table {
     private void inputDone() {
         if (!inputDone && timePassed > timeBeforeStart()) {
             inputDone = true;
+            game.playSound.stop();
             firstRotator.clearActions();
             secondRotator.clearActions();
             clearActions();
             updateScoreLabel();
-            if (score < getMinScoreNeeded())
+            if (score < getMinScoreNeeded()) {
+                game.lostSound.play();
                 setGameOver();
-            else {
+            } else {
+                game.bell.play();
                 levelScores.add(score);
                 currentLevel++;
                 addAction(Actions.sequence(Actions.color(Color.FOREST, .5f, Interpolation.fade),
@@ -188,6 +199,7 @@ public class PlayScreen extends Table {
                 timePassed += delta;
                 progressBar.setValue(timePassed - timeBeforeStart());
                 if (timePassed >= timeBeforeStart() + getTimeAvail()) {
+                    game.lostSound.play();
                     setGameOver();
                 }
                 updateScoreLabel();
@@ -198,6 +210,7 @@ public class PlayScreen extends Table {
     public void setGameOver() {
         clearActions();
         inputDone = true;
+        game.playSound.stop();
         firstRotator.clearActions();
         secondRotator.clearActions();
         addAction(Actions.sequence(Actions.fadeOut(2f, Interpolation.fade),
@@ -249,5 +262,17 @@ public class PlayScreen extends Table {
         if (stage != null) {
             stage.setKeyboardFocus(this);
         }
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void setPaused(boolean paused) {
+        if (paused)
+            game.playSound.pause();
+        isPaused = paused;
+        if (!paused)
+            game.playSound.resume();
     }
 }
