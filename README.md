@@ -6,4 +6,6 @@ Theme is "Parallel worlds".
 
 Use the code as you want.
 
-[Play the game](https://mrstahlfelge.itch.io/parallel-worlds)
+[Play the game on itch](https://mrstahlfelge.itch.io/parallel-worlds)
+
+[Play the game on GameJolt](https://gamejolt.com/games/parallel/539974)
