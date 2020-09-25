@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -91,9 +92,10 @@ public class PlayScreen extends Table {
 
         boolean nextLevel = actionProducer.addSwingActions(currentLevel, firstRotator, secondRotator);
 
-        if (!nextLevel)
+        if (!nextLevel) {
+            game.gsClient.unlockAchievement(GdxJamGame.TROPHY_DONE);
             setGameOver();
-        else {
+        } else {
 
             level.setText("Level " + (1 + currentLevel));
             inputDone = false;
@@ -172,6 +174,13 @@ public class PlayScreen extends Table {
             secondRotator.clearActions();
             clearActions();
             updateScoreLabel();
+
+            if (score == 0) {
+                game.gsClient.unlockAchievement(GdxJamGame.TROPHY_ZERO);
+            } else if (score == 100) {
+                game.gsClient.unlockAchievement(GdxJamGame.TROPHY_PERFECT);
+            }
+
             if (score < getMinScoreNeeded()) {
                 game.lostSound.play();
                 setGameOver();
@@ -248,7 +257,7 @@ public class PlayScreen extends Table {
         // get it from -90 to 90 with 0 being the worst
         absDegree -= 90;
         absDegree = Math.abs(absDegree);
-        score = (int) ((absDegree) * (10 / 9f));
+        score = MathUtils.round((absDegree) * (10 / 9f));
     }
 
     private float normalizeRotation(float rotation) {

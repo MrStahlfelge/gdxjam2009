@@ -31,6 +31,8 @@ public class ScoreScreen extends ControllerMenuDialog {
         content.add("TOTAL").right().padRight(15);
         content.add(String.valueOf(total));
 
+        game.gsClient.submitToLeaderboard("main", total, null);
+
         getButtonTable().padTop(20);
         button("Close");
     }

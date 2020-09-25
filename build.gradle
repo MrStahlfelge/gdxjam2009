@@ -24,7 +24,7 @@ allprojects {
         appName = "gdx-jam-2009"
         gdxVersion = '1.9.12-SNAPSHOT'
         roboVMVersion = '2.3.5'
-        pushMsgsVersion = '0.0.1-SNAPSHOT'
+        gamesvcsVersion = '1.0.2'
     }
 
     repositories {
@@ -88,6 +88,9 @@ project(":html") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
         compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
         compile "de.golfgl.gdxcontrollerutils:gdx-controllerutils-scene2d:2.1.0:sources"
+        compile "de.golfgl.gdxgamesvcs:gdx-gamesvcs-core:$gamesvcsVersion:sources"
+        compile "de.golfgl.gdxgamesvcs:gdx-gamesvcs-core-gamejolt:$gamesvcsVersion"
+        compile "de.golfgl.gdxgamesvcs:gdx-gamesvcs-core-gamejolt:$gamesvcsVersion:sources"
     }
 }
 
@@ -98,6 +101,7 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "de.golfgl.gdxcontrollerutils:gdx-controllerutils-scene2d:2.1.0"
+        compile "de.golfgl.gdxgamesvcs:gdx-gamesvcs-core:$gamesvcsVersion"
     }
 }
 

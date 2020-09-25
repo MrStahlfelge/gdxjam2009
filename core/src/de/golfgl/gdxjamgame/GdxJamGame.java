@@ -17,8 +17,15 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import de.golfgl.gdx.controllers.ControllerMenuDialog;
 import de.golfgl.gdx.controllers.ControllerMenuStage;
 import de.golfgl.gdx.controllers.IControllerActable;
+import de.golfgl.gdxgamesvcs.IGameServiceClient;
+import de.golfgl.gdxgamesvcs.NoGameServiceClient;
 
 public class GdxJamGame extends ApplicationAdapter {
+    public static final String TROPHY_PERFECT = "perfect";
+    public static final String TROPHY_ZERO = "bad";
+    public static final String TROPHY_DONE = "done";
+
+    public IGameServiceClient gsClient;
     PlayScreen playScreen;
     Skin skin;
     ControllerMenuStage stage;
@@ -45,6 +52,12 @@ public class GdxJamGame extends ApplicationAdapter {
         prepareSounds();
 
         prepareUI();
+
+        if (gsClient == null)
+            gsClient = new NoGameServiceClient();
+
+        // establish a connection to the game service without error messages or login screens
+        gsClient.resumeSession();
     }
 
     private void prepareSounds() {
