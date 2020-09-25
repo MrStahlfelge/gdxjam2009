@@ -2,6 +2,7 @@ package de.golfgl.gdxjamgame;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -29,7 +30,15 @@ public class GdxJamGame extends ApplicationAdapter {
 
     @Override
     public void create() {
-        stage = new ControllerMenuStage(new ExtendViewport(800, 450));
+        stage = new ControllerMenuStage(new ExtendViewport(800, 450)) {
+            @Override
+            public boolean isDefaultActionKeyCode(int keyCode) {
+                if (keyCode == Input.Keys.SPACE)
+                    return true;
+                else
+                    return super.isDefaultActionKeyCode(keyCode);
+            }
+        };
         Gdx.input.setInputProcessor(stage);
 
         prepareSkin();

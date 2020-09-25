@@ -17,8 +17,7 @@ public class ScoreScreen extends ControllerMenuDialog {
         content.setSkin(game.skin);
         content.defaults();
 
-        content.add("SCORES");
-        add();
+        content.add("SCORES").colspan(2);
 
         int total = 0;
         for (int level = 0; level < scores.size; level++) {
