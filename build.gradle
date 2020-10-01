@@ -8,7 +8,8 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'org.wisepersist:gwt-gradle-plugin:1.0.6'
+        classpath 'org.wisepersist:gwt-gradle-plugin:1.0.13'
+        classpath 'org.gretty:gretty:3.0.2'
         classpath 'com.android.tools.build:gradle:3.2.0'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.5'
         classpath 'org.multi-os-engine:moe-gradle:1.2.3'
@@ -30,6 +31,7 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
+        jcenter()
         google()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
@@ -80,7 +82,7 @@ project(":ios") {
 project(":html") {
     apply plugin: "gwt"
     apply plugin: "war"
-
+    apply plugin: "org.gretty"
 
     dependencies {
         compile project(":core")
